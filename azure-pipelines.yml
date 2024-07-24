@@ -1,0 +1,25 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- test
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: InstallMATLAB@1
+  inputs:
+    release: 'latest'
+- task: RunMATLABTests@1
+  condition: always()
+  inputs:
+    testResultsJUnit: 'results.xml'
+    codeCoverageCobertura: 'coverage.xml'
+- task: PublishTestResults@2
+  condition: always()
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'results.xml'
